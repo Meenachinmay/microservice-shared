@@ -15,3 +15,10 @@ type LogPayload struct {
 	ServiceName string
 	LogData     string
 }
+
+type UserPayload struct {
+	Email string `json:"email"`
+	Name string `json:"name"`
+	AvailabelTimings string `json:"available_timings"`
+	PreferredMethod  string `json:"preferred_method"`
+}
