@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"4d63.com/tz"
 	"fmt"
 	"strings"
 	"time"
@@ -33,7 +34,7 @@ func ParseTimeSlot(timeSlotStr string) (TimeSlot, error) {
 
 func ConvertToTokyoTime() time.Time {
 	// Load the Asia/Tokyo location
-	loc, err := time.LoadLocation("Asia/Tokyo")
+	loc, err := tz.LoadLocation("Asia/Tokyo")
 	if err != nil {
 		fmt.Println("Error loading location:", err)
 		return time.Now() // Fallback to UTC
