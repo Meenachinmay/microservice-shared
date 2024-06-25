@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"time"
 )
@@ -18,12 +19,17 @@ func ParseTimeSlot(timeSlotStr string) (TimeSlot, error) {
 		return TimeSlot{}, fmt.Errorf("invalid time slot format")
 	}
 
-	start, err := time.Parse(layout, times[0])
+	location, err := time.LoadLocation("Asia/Tokyo")
 	if err != nil {
 		return TimeSlot{}, err
 	}
 
-	end, err := time.Parse(layout, times[1])
+	start, err := time.ParseInLocation(layout, times[0], location)
+	if err != nil {
+		return TimeSlot{}, err
+	}
+
+	end, err := time.ParseInLocation(layout, times[1], location)
 	if err != nil {
 		return TimeSlot{}, err
 	}
@@ -32,9 +38,14 @@ func ParseTimeSlot(timeSlotStr string) (TimeSlot, error) {
 }
 
 func IsCurrentTimeInSlot(slot TimeSlot) bool {
-	now := time.Now()
-	start := time.Date(now.Year(), now.Month(), now.Day(), slot.Start.Hour(), slot.Start.Minute(), 0, 0, now.Location())
-	end := time.Date(now.Year(), now.Month(), now.Day(), slot.End.Hour(), slot.End.Minute(), 0, 0, now.Location())
+	location, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		log.Fatalf("failed to load location: %v", err)
+	}
+
+	now := time.Now().In(location)
+	start := time.Date(now.Year(), now.Month(), now.Day(), slot.Start.Hour(), slot.Start.Minute(), 0, 0, location)
+	end := time.Date(now.Year(), now.Month(), now.Day(), slot.End.Hour(), slot.End.Minute(), 0, 0, location)
 
 	if now.After(start) && now.Before(end) {
 		return true
