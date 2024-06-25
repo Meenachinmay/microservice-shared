@@ -42,7 +42,7 @@ func IsCurrentTimeInSlot(slot TimeSlot) bool {
 	return false
 }
 
-func checkIfSlotIsInCurrentTimeWindow(slotStr string) bool {
+func CheckIfSlotIsInCurrentTimeWindow(slotStr string) bool {
 	slot, err := ParseTimeSlot(slotStr)
 	if err != nil {
 		fmt.Println("Error parsing time slot:", err)
@@ -52,6 +52,6 @@ func checkIfSlotIsInCurrentTimeWindow(slotStr string) bool {
 	if IsCurrentTimeInSlot(slot) {
 		return true
 	}
-	
+
 	return false
 }
