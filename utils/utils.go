@@ -19,12 +19,19 @@ func ParseTimeSlot(timeSlotStr string) (TimeSlot, error) {
 		return TimeSlot{}, fmt.Errorf("invalid time slot format")
 	}
 
-	start, err := time.Parse(layout, times[0])
+	// Load the Asia/Tokyo location
+	loc, err := tz.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		fmt.Println("Error loading location:", err)
+		return TimeSlot{}, err // Fallback to UTC
+	}
+
+	start, err := time.ParseInLocation(layout, times[0], loc)
 	if err != nil {
 		return TimeSlot{}, err
 	}
 
-	end, err := time.Parse(layout, times[1])
+	end, err := time.ParseInLocation(layout, times[1], loc)
 	if err != nil {
 		return TimeSlot{}, err
 	}
